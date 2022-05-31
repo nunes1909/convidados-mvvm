@@ -46,17 +46,121 @@ class ConvidadoRepository private constructor(context: Context) {
 
     fun buscaTodos(): List<ConvidadoModel> {
         val list: MutableList<ConvidadoModel> = ArrayList()
-        return list
+
+        val convidado: ConvidadoModel? = null
+
+        return try {
+            val db = ConvidadoDataBaseHelper.readableDatabase
+
+            val projection = arrayOf(
+                DataBaseConstants.CONVIDADO.COLUMNS.ID,
+                DataBaseConstants.CONVIDADO.COLUMNS.NOME,
+                DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA
+            )
+
+            val cursor = db.query(
+                DataBaseConstants.CONVIDADO.TABLE_NOME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+            )
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+
+                    val id =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                    val nome =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
+                    val presenca =
+                        (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
+
+                    val convidado = ConvidadoModel(id, nome, presenca)
+                    list.add(convidado)
+                }
+
+            }
+
+            cursor?.close()
+
+            list
+        } catch (e: Exception) {
+            Log.e(TAG, "salvar: ", e)
+            list
+        }
     }
 
     fun buscaPresentes(): List<ConvidadoModel> {
         val list: MutableList<ConvidadoModel> = ArrayList()
-        return list
+
+        val convidado: ConvidadoModel? = null
+
+        return try {
+            val db = ConvidadoDataBaseHelper.readableDatabase
+
+            val cursor = db.rawQuery("SELECT * FROM Convidado WHERE presence = 1", null)
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+
+                    val id =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                    val nome =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
+                    val presenca =
+                        (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
+
+                    val convidado = ConvidadoModel(id, nome, presenca)
+                    list.add(convidado)
+                }
+
+            }
+
+            cursor?.close()
+
+            list
+        } catch (e: Exception) {
+            Log.e(TAG, "salvar: ", e)
+            list
+        }
     }
 
     fun buscaAusentes(): List<ConvidadoModel> {
         val list: MutableList<ConvidadoModel> = ArrayList()
-        return list
+
+        val convidado: ConvidadoModel? = null
+
+        return try {
+            val db = ConvidadoDataBaseHelper.readableDatabase
+
+            val cursor = db.rawQuery("SELECT * FROM Convidado WHERE presence = 0", null)
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+
+                    val id =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                    val nome =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
+                    val presenca =
+                        (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
+
+                    val convidado = ConvidadoModel(id, nome, presenca)
+                    list.add(convidado)
+                }
+
+            }
+
+            cursor?.close()
+
+            list
+        } catch (e: Exception) {
+            Log.e(TAG, "salvar: ", e)
+            list
+        }
     }
 
     fun buscaConvidado(id: Int): ConvidadoModel? {
