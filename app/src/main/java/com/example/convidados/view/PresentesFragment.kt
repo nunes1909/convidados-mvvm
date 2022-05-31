@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.convidados.databinding.FragmentGalleryBinding
+import com.example.convidados.databinding.FragmentPresentesBinding
 import com.example.convidados.viewmodel.PresentesViewModel
 
 class PresentesFragment : Fragment() {
 
-    private var _binding: FragmentGalleryBinding? = null
+    private var _binding: FragmentPresentesBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,14 +23,14 @@ class PresentesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel =
+        val presentesViewModel =
             ViewModelProvider(this).get(PresentesViewModel::class.java)
 
-        _binding = FragmentGalleryBinding.inflate(inflater, container, false)
+        _binding = FragmentPresentesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner) {
+        presentesViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

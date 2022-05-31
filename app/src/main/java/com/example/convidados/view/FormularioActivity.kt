@@ -2,6 +2,7 @@ package com.example.convidados.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.convidados.databinding.ActivityFormularioConvidadoBinding
@@ -22,7 +23,12 @@ class FormularioActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(FormularioViewModel::class.java)
 
         viewModel.salvarConvidado.observe(this, Observer {
-
+            if (it){
+                Toast.makeText(this@FormularioActivity, "Sucesso", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this@FormularioActivity, "Falha", Toast.LENGTH_SHORT).show()
+            }
+            finish()
         })
 
         binding.buttonSalvar.setOnClickListener {

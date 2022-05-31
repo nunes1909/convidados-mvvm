@@ -17,7 +17,7 @@ class FormularioViewModel(application: Application) : AndroidViewModel(applicati
 
     fun salvar(nome: String, presenca: Boolean) {
         val convidadoNovo = ConvidadoModel(nome = nome, presenca = presenca)
-        convidadoRepository.salvar(convidadoNovo)
+        _salvarConvidado.value = convidadoRepository.salvar(convidadoNovo)
     }
 
 }

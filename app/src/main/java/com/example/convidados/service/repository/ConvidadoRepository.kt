@@ -72,7 +72,7 @@ class ConvidadoRepository private constructor(context: Context) {
                 while (cursor.moveToNext()) {
 
                     val id =
-                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
                     val nome =
                         cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
                     val presenca =
@@ -107,7 +107,7 @@ class ConvidadoRepository private constructor(context: Context) {
                 while (cursor.moveToNext()) {
 
                     val id =
-                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
                     val nome =
                         cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
                     val presenca =
@@ -142,7 +142,7 @@ class ConvidadoRepository private constructor(context: Context) {
                 while (cursor.moveToNext()) {
 
                     val id =
-                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
                     val nome =
                         cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
                     val presenca =

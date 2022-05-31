@@ -1,13 +1,21 @@
 package com.example.convidados.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.convidados.service.model.ConvidadoModel
+import com.example.convidados.service.repository.ConvidadoRepository
 
-class TodosViewModel : ViewModel() {
+class TodosViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private val repository = ConvidadoRepository.getInstance(application.applicationContext)
+
+    private var _todosConvidados = MutableLiveData<List<ConvidadoModel>>()
+    val todosConvidados: LiveData<List<ConvidadoModel>> = _todosConvidados
+
+    fun carregaLista() {
+        _todosConvidados.value = repository.buscaTodos()
     }
-    val text: LiveData<String> = _text
+
 }
