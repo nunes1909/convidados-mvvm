@@ -16,11 +16,12 @@ import com.example.convidados.viewmodel.TodosViewModel
 
 class TodosFragment : Fragment() {
 
+
     private val adapter by lazy {
         ConvidadoAdapter()
     }
 
-    private var convidados: List<ConvidadoModel>? = null
+    private lateinit var todosViewModel: TodosViewModel
 
     private var _binding: FragmentTodosBinding? = null
 
@@ -33,7 +34,7 @@ class TodosFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val todosViewModel =
+        todosViewModel =
             ViewModelProvider(this).get(TodosViewModel::class.java)
 
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
@@ -49,20 +50,15 @@ class TodosFragment : Fragment() {
         todosViewModel.todosConvidados.observe(viewLifecycleOwner, Observer { listaConvidados ->
             listaConvidados?.let { listaConvidados ->
                 adapter.atualizaLista(listaConvidados)
-                convidados = listaConvidados
             }
         })
-        todosViewModel.carregaLista()
-
 
         return root
     }
 
     override fun onResume() {
-
-
         super.onResume()
-        adapter.atualizaLista(convidados!!)
+        todosViewModel.carregaLista()
     }
 
     override fun onDestroyView() {
