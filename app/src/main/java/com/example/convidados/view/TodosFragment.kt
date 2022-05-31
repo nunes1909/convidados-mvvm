@@ -10,19 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.convidados.databinding.FragmentTodosBinding
+import com.example.convidados.service.constants.TODOS
 import com.example.convidados.service.model.ConvidadoModel
 import com.example.convidados.view.adapter.ConvidadoAdapter
 import com.example.convidados.view.listener.ConvidadoListener
-import com.example.convidados.viewmodel.TodosViewModel
+import com.example.convidados.viewmodel.ConvidadosViewModel
 
 class TodosFragment : Fragment() {
 
 
+    private lateinit var convidadosViewModel: ConvidadosViewModel
     private val adapter by lazy {
         ConvidadoAdapter()
     }
-
-    private lateinit var todosViewModel: TodosViewModel
     private lateinit var listener: ConvidadoListener
 
     private var _binding: FragmentTodosBinding? = null
@@ -36,8 +36,8 @@ class TodosFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        todosViewModel =
-            ViewModelProvider(this).get(TodosViewModel::class.java)
+        convidadosViewModel =
+            ViewModelProvider(this).get(ConvidadosViewModel::class.java)
 
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -58,14 +58,14 @@ class TodosFragment : Fragment() {
             }
 
             override fun onDelete(convidadoModel: ConvidadoModel) {
-                todosViewModel.delete(convidadoModel)
-                todosViewModel.carregaLista()
+                convidadosViewModel.delete(convidadoModel)
+                convidadosViewModel.carregaLista(TODOS)
             }
         }
 
         adapter.preencheListener(listener)
 
-        todosViewModel.todosConvidados.observe(viewLifecycleOwner, Observer { listaConvidados ->
+        convidadosViewModel.todosConvidados.observe(viewLifecycleOwner, Observer { listaConvidados ->
             listaConvidados?.let { listaConvidados ->
                 adapter.atualizaLista(listaConvidados)
             }
@@ -76,7 +76,7 @@ class TodosFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        todosViewModel.carregaLista()
+        convidadosViewModel.carregaLista(TODOS)
 
     }
 

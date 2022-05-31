@@ -101,7 +101,7 @@ class ConvidadoRepository private constructor(context: Context) {
         return try {
             val db = ConvidadoDataBaseHelper.readableDatabase
 
-            val cursor = db.rawQuery("SELECT * FROM Convidado WHERE presence = 1", null)
+            val cursor = db.rawQuery("SELECT * FROM Convidado WHERE presenca = 1", null)
 
             if (cursor != null && cursor.count > 0) {
                 while (cursor.moveToNext()) {
@@ -130,35 +130,26 @@ class ConvidadoRepository private constructor(context: Context) {
 
     fun buscaAusentes(): List<ConvidadoModel> {
         val list: MutableList<ConvidadoModel> = ArrayList()
-
-        val convidado: ConvidadoModel? = null
-
         return try {
             val db = ConvidadoDataBaseHelper.readableDatabase
 
-            val cursor = db.rawQuery("SELECT * FROM Convidado WHERE presence = 0", null)
+            val cursor = db.rawQuery("SELECT id, nome, presenca FROM Convidado WHERE presenca = 0", null)
 
             if (cursor != null && cursor.count > 0) {
                 while (cursor.moveToNext()) {
 
-                    val id =
-                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
-                    val nome =
-                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
-                    val presenca =
-                        (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.ID))
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
+                    val presence = (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
 
-                    val convidado = ConvidadoModel(id, nome, presenca)
-                    list.add(convidado)
+                    val guest = ConvidadoModel(id, name, presence)
+                    list.add(guest)
                 }
-
             }
 
             cursor?.close()
-
             list
         } catch (e: Exception) {
-            Log.e(TAG, "salvar: ", e)
             list
         }
     }
