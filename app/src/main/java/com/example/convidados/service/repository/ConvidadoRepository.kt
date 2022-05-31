@@ -13,11 +13,11 @@ class ConvidadoRepository private constructor(context: Context) {
     private var ConvidadoDataBaseHelper: ConvidadoDataBaseHelper =
         ConvidadoDataBaseHelper(context = context)
 
-    companion object{
+    companion object {
         private lateinit var repository: ConvidadoRepository
 
-        fun getInstance(context: Context) : ConvidadoRepository{
-            if (!::repository.isInitialized){
+        fun getInstance(context: Context): ConvidadoRepository {
+            if (!::repository.isInitialized) {
                 repository = ConvidadoRepository(context = context)
             }
             return repository
@@ -59,6 +59,50 @@ class ConvidadoRepository private constructor(context: Context) {
         return list
     }
 
+    fun buscaConvidado(id: Int): ConvidadoModel? {
+
+        val convidado: ConvidadoModel? = null
+
+        return try {
+            val db = ConvidadoDataBaseHelper.readableDatabase
+
+            val projection = arrayOf(
+                DataBaseConstants.CONVIDADO.COLUMNS.NOME,
+                DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA
+            )
+            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID
+            val args = arrayOf(id.toString())
+
+            val cursor = db.query(
+                DataBaseConstants.CONVIDADO.TABLE_NOME,
+                projection,
+                selection,
+                args,
+                null,
+                null,
+                null
+            )
+
+            if (cursor != null && cursor.count > 0) {
+                cursor.moveToFirst()
+                val nome =
+                    cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
+                val presenca =
+                    (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
+
+                ConvidadoModel(id, nome, presenca)
+
+            }
+
+            cursor?.close()
+
+            convidado
+        } catch (e: Exception) {
+            Log.e(TAG, "salvar: ", e)
+            convidado
+        }
+    }
+
     // UPDATE
     fun alterar(convidado: ConvidadoModel): Boolean {
         return try {
@@ -81,8 +125,20 @@ class ConvidadoRepository private constructor(context: Context) {
     }
 
     // DELETE
-    fun remover(convidado: ConvidadoModel) {
+    fun remover(id: Int): Boolean {
+        return try {
+            val db = ConvidadoDataBaseHelper.writableDatabase
 
+            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID
+            val args = arrayOf(id.toString())
+
+            db.delete(DataBaseConstants.CONVIDADO.TABLE_NOME, selection, args)
+
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "salvar: ", e)
+            false
+        }
     }
 
 }
