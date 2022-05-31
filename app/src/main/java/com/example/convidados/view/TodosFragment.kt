@@ -56,6 +56,11 @@ class TodosFragment : Fragment() {
                     startActivity(this)
                 }
             }
+
+            override fun onDelete(convidadoModel: ConvidadoModel) {
+                todosViewModel.delete(convidadoModel)
+                todosViewModel.carregaLista()
+            }
         }
 
         adapter.preencheListener(listener)

@@ -227,18 +227,16 @@ class ConvidadoRepository private constructor(context: Context) {
     }
 
     // DELETE
-    fun remover(id: Int): Boolean {
+    fun delete(id: Int): Boolean {
         return try {
             val db = ConvidadoDataBaseHelper.writableDatabase
-
-            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID
+            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID + " = ?"
             val args = arrayOf(id.toString())
 
             db.delete(DataBaseConstants.CONVIDADO.TABLE_NOME, selection, args)
 
             true
         } catch (e: Exception) {
-            Log.e(TAG, "salvar: ", e)
             false
         }
     }

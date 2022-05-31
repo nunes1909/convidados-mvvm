@@ -18,4 +18,8 @@ class TodosViewModel(application: Application) : AndroidViewModel(application) {
         _todosConvidados.value = repository.buscaTodos()
     }
 
+    fun delete(convidadoModel: ConvidadoModel) {
+        repository.delete(convidadoModel.id)
+    }
+
 }

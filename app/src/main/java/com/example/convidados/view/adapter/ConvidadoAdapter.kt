@@ -1,5 +1,6 @@
 package com.example.convidados.view.adapter
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,20 @@ class ConvidadoAdapter : RecyclerView.Adapter<ConvidadoAdapter.ConvidadoViewHold
             textNome.setOnClickListener {
                 listener.onClick(convidado)
             }
+
+            textNome.setOnLongClickListener {
+
+                AlertDialog.Builder(itemView.context)
+                    .setTitle("Removendo um convidado")
+                    .setMessage("Você quer remover um convidado?")
+                    .setPositiveButton("Sim") { _, _ ->
+                        listener.onDelete(convidado)
+                    }
+                    .setNegativeButton("Não", null)
+                    .show()
+
+                true
+            }
         }
 
     }
@@ -49,7 +64,7 @@ class ConvidadoAdapter : RecyclerView.Adapter<ConvidadoAdapter.ConvidadoViewHold
         notifyDataSetChanged()
     }
 
-    fun preencheListener(listener: ConvidadoListener){
+    fun preencheListener(listener: ConvidadoListener) {
         mListener = listener
     }
 }
