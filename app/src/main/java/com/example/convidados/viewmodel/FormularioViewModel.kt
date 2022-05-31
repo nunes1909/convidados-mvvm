@@ -12,12 +12,28 @@ class FormularioViewModel(application: Application) : AndroidViewModel(applicati
     private val mContext = application.applicationContext
     private val convidadoRepository = ConvidadoRepository.getInstance(mContext)
 
+    //salvar
     private var _salvarConvidado = MutableLiveData<Boolean>()
     val salvarConvidado: LiveData<Boolean> = _salvarConvidado!!
 
-    fun salvar(nome: String, presenca: Boolean) {
-        val convidadoNovo = ConvidadoModel(nome = nome, presenca = presenca)
-        _salvarConvidado.value = convidadoRepository.salvar(convidadoNovo)
+    fun salvar(id: Int, nome: String, presenca: Boolean) {
+        val convidado = ConvidadoModel(id = id, nome = nome, presenca = presenca)
+
+        if (id == 0) {
+            _salvarConvidado.value = convidadoRepository.salvar(convidado)
+        } else {
+            _salvarConvidado.value = convidadoRepository.update(convidado)
+        }
+
     }
+
+    //visualização
+    private var _carregaConvidado = MutableLiveData<ConvidadoModel>()
+    val carregaConvidado: LiveData<ConvidadoModel> = _carregaConvidado
+
+    fun load(it: Int) {
+        _carregaConvidado.value = convidadoRepository.get(it)
+    }
+
 
 }

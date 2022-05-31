@@ -163,18 +163,20 @@ class ConvidadoRepository private constructor(context: Context) {
         }
     }
 
-    fun buscaConvidado(id: Int): ConvidadoModel? {
+    fun get(id: Int): ConvidadoModel? {
 
-        val convidado: ConvidadoModel? = null
-
+        var convidado: ConvidadoModel? = null
         return try {
             val db = ConvidadoDataBaseHelper.readableDatabase
 
+            // Colunas que serão retornadas
             val projection = arrayOf(
                 DataBaseConstants.CONVIDADO.COLUMNS.NOME,
                 DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA
             )
-            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID
+
+            // Filtro
+            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID + " = ?"
             val args = arrayOf(id.toString())
 
             val cursor = db.query(
@@ -187,43 +189,39 @@ class ConvidadoRepository private constructor(context: Context) {
                 null
             )
 
+            // Verifica se existem dados no cursor
             if (cursor != null && cursor.count > 0) {
                 cursor.moveToFirst()
-                val nome =
-                    cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
-                val presenca =
-                    (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
 
-                ConvidadoModel(id, nome, presenca)
+                val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.NOME))
+                val presence = (cursor.getInt(cursor.getColumnIndex(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA)) == 1)
 
+                convidado = ConvidadoModel(id, name, presence)
             }
 
             cursor?.close()
-
             convidado
         } catch (e: Exception) {
-            Log.e(TAG, "salvar: ", e)
             convidado
         }
     }
 
     // UPDATE
-    fun alterar(convidado: ConvidadoModel): Boolean {
+    fun update(convidado: ConvidadoModel): Boolean {
         return try {
             val db = ConvidadoDataBaseHelper.writableDatabase
 
-            val value = ContentValues()
-            value.put(DataBaseConstants.CONVIDADO.COLUMNS.NOME, convidado.nome)
-            value.put(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA, convidado.presenca)
+            val contentValues = ContentValues()
+            contentValues.put(DataBaseConstants.CONVIDADO.COLUMNS.NOME, convidado.nome)
+            contentValues.put(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA, convidado.presenca)
 
-            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID
+            // Critério de seleção
+            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID + " = ?"
             val args = arrayOf(convidado.id.toString())
 
-            db.update(DataBaseConstants.CONVIDADO.TABLE_NOME, value, selection, args)
-
+            db.update(DataBaseConstants.CONVIDADO.TABLE_NOME, contentValues, selection, args)
             true
         } catch (e: Exception) {
-            Log.e(TAG, "salvar: ", e)
             false
         }
     }

@@ -1,10 +1,10 @@
 package com.example.convidados.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.convidados.databinding.FragmentTodosBinding
 import com.example.convidados.service.model.ConvidadoModel
 import com.example.convidados.view.adapter.ConvidadoAdapter
+import com.example.convidados.view.listener.ConvidadoListener
 import com.example.convidados.viewmodel.TodosViewModel
 
 class TodosFragment : Fragment() {
@@ -22,6 +23,7 @@ class TodosFragment : Fragment() {
     }
 
     private lateinit var todosViewModel: TodosViewModel
+    private lateinit var listener: ConvidadoListener
 
     private var _binding: FragmentTodosBinding? = null
 
@@ -47,6 +49,17 @@ class TodosFragment : Fragment() {
         //define adaper
         recycler.adapter = adapter
 
+        listener = object : ConvidadoListener{
+            override fun onClick(convidadoModel: ConvidadoModel) {
+                Intent(context, FormularioActivity::class.java).apply {
+                    putExtra("convidado", convidadoModel)
+                    startActivity(this)
+                }
+            }
+        }
+
+        adapter.preencheListener(listener)
+
         todosViewModel.todosConvidados.observe(viewLifecycleOwner, Observer { listaConvidados ->
             listaConvidados?.let { listaConvidados ->
                 adapter.atualizaLista(listaConvidados)
@@ -59,6 +72,7 @@ class TodosFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         todosViewModel.carregaLista()
+
     }
 
     override fun onDestroyView() {
