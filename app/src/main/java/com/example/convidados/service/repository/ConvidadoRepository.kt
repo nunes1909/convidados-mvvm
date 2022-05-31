@@ -60,8 +60,24 @@ class ConvidadoRepository private constructor(context: Context) {
     }
 
     // UPDATE
-    fun alterar(convidado: ConvidadoModel) {
+    fun alterar(convidado: ConvidadoModel): Boolean {
+        return try {
+            val db = ConvidadoDataBaseHelper.writableDatabase
 
+            val value = ContentValues()
+            value.put(DataBaseConstants.CONVIDADO.COLUMNS.NOME, convidado.nome)
+            value.put(DataBaseConstants.CONVIDADO.COLUMNS.PRESENCA, convidado.presenca)
+
+            val selection = DataBaseConstants.CONVIDADO.COLUMNS.ID
+            val args = arrayOf(convidado.id.toString())
+
+            db.update(DataBaseConstants.CONVIDADO.TABLE_NOME, value, selection, args)
+
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "salvar: ", e)
+            false
+        }
     }
 
     // DELETE

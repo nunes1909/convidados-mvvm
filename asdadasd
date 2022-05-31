@@ -1,0 +1,17 @@
+[33mcommit f3a7c81149498492b741a6388ab5d5008df80cad[m[33m ([m[1;36mHEAD -> [m[1;32meditar[m[33m)[m
+Author: Gabriel Nunes <80295127+nunes1909@users.noreply.github.com>
+Date:   Tue May 31 09:00:32 2022 -0300
+
+    Finalizando processo de edição
+
+[33mcommit 16854f1d0aac555d1e2694956e029f06463b5ee1[m[33m ([m[1;32msalvar[m[33m)[m
+Author: Gabriel Nunes <80295127+nunes1909@users.noreply.github.com>
+Date:   Tue May 31 00:19:26 2022 -0300
+
+    Finalizando comportamento de salvar um convidado
+
+[33mcommit 16a3ec193e6fc0298e7b07e1e3083f79688aa646[m
+Author: Gabriel Nunes <80295127+nunes1909@users.noreply.github.com>
+Date:   Mon May 30 23:34:48 2022 -0300
+
+    Configurando banco de dados SQLite com Singleton
